@@ -16,11 +16,15 @@ EXTERNAL_API_URL = "http://127.0.0.1:8000/workouts"
 # Modelo de Item para a documentação Swagger
 item_model = api.model('Workout', {
     'id': fields.Integer(readonly=True),
-    'duration': fields.String(required=True, description='Format: HH:MM:SS.'),
     'date': fields.Date(required=True, description='Format: AAAA:MM:YY.'),
+    'time': fields.String(required=False, description='Format: HH:MM.'),
+    'city': fields.String(required=False, description='Name of the city where the workout has done.'),
+    'state': fields.String(required=False, description='Name of the state where the workout has done.'),
     'kilometers': fields.Float(required=True, description='The length (km).'),
+    'duration': fields.String(required=True, description='Format: HH:MM:SS.'),
     'frequency': fields.Integer(required=False, description='The heart rate per minute.'),
-    'kcal': fields.Integer(required=False, description='The energy spent (kcal).')
+    'kcal': fields.Integer(required=False, description='The energy spent (kcal).'),
+    'temperature': fields.Float(required=False, description='Temperature (ºC).'),
 })
 
 # Recurso para listar e criar itens
