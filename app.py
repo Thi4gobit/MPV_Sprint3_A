@@ -25,7 +25,7 @@ item_model = api.model('Workout', {
     'duration': fields.String(required=True, description='Format: HH:MM:SS.', default='01:00:00'),
     'frequency': fields.Integer(required=False, description='The heart rate per minute.', default=150),
     'kcal': fields.Integer(required=False, description='The energy spent (kcal).', default=600),
-    'temperature': fields.Date(required=False, description='Format: HH:MM.'),
+    # 'temperature': fields.Float(required=False, description='Format: HH:MM.', example=None),
     'speed': fields.Float(readonly=True)
 })
 
