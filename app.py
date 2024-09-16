@@ -1,145 +1,83 @@
 from flask import Flask, request, jsonify
-from flask_restx import Api, Resource, fields
+from flask_restx import Api, Resource, fields, Namespace
 import requests
+from datetime import datetime, date
+
+
+EXTERNAL_API_URL = "http://127.0.0.1:8000/workouts"
 
 app = Flask(__name__)
 api = Api(
-    app, version='1.0.0', 
-    title='Cycling',
+    app, version='1.0.0',
+    title='Cycling - 5000',
     description='App for register your workouts of cycling',
-    doc='/'
+    doc='/',
+    default='Workout',
+    default_label='Cycling'
 )
 
-# URL da API externa
-EXTERNAL_API_URL = "http://127.0.0.1:8000/workouts"
-
-# Modelo de Item para a documentação Swagger
 item_model = api.model('Workout', {
     'id': fields.Integer(readonly=True),
-    'date': fields.Date(required=True, description='Format: AAAA:MM:YY.'),
-    'time': fields.String(required=False, description='Format: HH:MM.'),
-    'city': fields.String(required=False, description='Name of the city where the workout has done.'),
-    'state': fields.String(required=False, description='Name of the state where the workout has done.'),
-    'kilometers': fields.Float(required=True, description='The length (km).'),
-    'duration': fields.String(required=True, description='Format: HH:MM:SS.'),
-    'frequency': fields.Integer(required=False, description='The heart rate per minute.'),
-    'kcal': fields.Integer(required=False, description='The energy spent (kcal).'),
-    'temperature': fields.Float(required=False, description='Temperature (ºC).'),
+    'date': fields.Date(required=True, description='Format: AAAA:MM:YY.', default=date.today()),
+    'time_of_the_day': fields.String(required=False, description='Format: HH:MM.', default=f"{datetime.now().strftime("%H:%M:%S")}"),
+    'city': fields.String(required=False, description='', default='Rio de Janeiro'),
+    'state': fields.String(required=False, description='', default='RJ'),
+    'kilometers': fields.Float(required=True, description='The length (km).', default=10.00),
+    'duration': fields.String(required=True, description='Format: HH:MM:SS.', default='01:00:00'),
+    'frequency': fields.Integer(required=False, description='The heart rate per minute.', default=150),
+    'kcal': fields.Integer(required=False, description='The energy spent (kcal).', default=600),
+    'temperature': fields.Date(required=False, description='Format: HH:MM.'),
+    'speed': fields.Float(readonly=True)
 })
 
-# Recurso para listar e criar itens
+
 @api.route('/items')
 class ItemList(Resource):
-    @api.doc('list_items')
-    @api.marshal_list_with(item_model)
+    @api.doc(description='List all items')
     def get(self):
-        """Lista todos os itens"""
+        """Lists all items"""
         response = requests.get(f"{EXTERNAL_API_URL}/get")
         if response.status_code == 200:
             return response.json(), 200
         return {'error': 'Failed to fetch items'}, response.status_code
 
-    @api.doc('create_item')
+
+@api.route('/new')
+class ItemNew(Resource):
+    @api.doc(description='Create a new item')
     @api.expect(item_model)
-    @api.marshal_with(item_model, code=201)
     def post(self):
-        """Cria um novo item"""
+        """Creates a new item"""
         data = request.get_json()
-        response = requests.post(EXTERNAL_API_URL, json=data)
-        if response.status_code == 201:
-            return response.json(), 201
-        return {'error': 'Failed to create item'}, response.status_code
-
-
-# Recurso para obter, atualizar e deletar itens específicos
-@api.route('/items/<int:item_id>')
-@api.response(404, 'Item not found')
-@api.param('item_id', 'The item identifier')
-class Item(Resource):
-    @api.doc('get_item')
-    @api.marshal_with(item_model)
-    def get(self, item_id):
-        """Obter um item específico"""
-        response = requests.get(f"{EXTERNAL_API_URL}/{item_id}")
+        response = requests.post(f"{EXTERNAL_API_URL}/post", json=data)
         if response.status_code == 200:
             return response.json(), 200
-        return {'error': 'Item not found'}, 404
+        return response.json(), response.status_code
 
-    @api.doc('update_item')
+
+@api.route('/update/<int:pk>')
+class ItemUpdate(Resource):
+    @api.doc(description='Update an existing item')
     @api.expect(item_model)
-    @api.marshal_with(item_model)
-    def put(self, item_id):
-        """Atualiza um item existente"""
+    def put(self, pk):
+        """Updates an existing item"""
         data = request.get_json()
-        response = requests.put(f"{EXTERNAL_API_URL}/{item_id}", json=data)
+        response = requests.put(f"{EXTERNAL_API_URL}/update/{pk}", json=data)
         if response.status_code == 200:
             return response.json(), 200
-        return {'error': 'Item not found or failed to update'}, 404
+        return response.json(), response.status_code
 
-    @api.doc('delete_item')
-    @api.response(204, 'Item deleted')
-    def delete(self, item_id):
-        """Deleta um item"""
-        response = requests.delete(f"{EXTERNAL_API_URL}/{item_id}")
+
+@api.route('/delete/<int:pk>')
+class ItemDelete(Resource):
+    @api.doc(description='Delete an item')
+    def delete(self, pk):
+        """Deletes an item"""
+        response = requests.delete(f"{EXTERNAL_API_URL}/delete/{pk}")
         if response.status_code == 200:
-            return {'message': 'Item deleted'}, 200
-        return {'error': 'Item not found or failed to delete'}, 404
+            return response.json(), 200
+        return response.json(), response.status_code
 
 
 if __name__ == '__main__':
     app.run(debug=True)
-
-
-
-# from flask import Flask, jsonify, request
-# import requests
-
-# app = Flask(__name__)
-
-# # URL da API externa
-# EXTERNAL_API_URL = "http://127.0.0.1:8000/workouts"
-
-# # Rota GET - Obter todos os itens ou um item específico da API externa
-# @app.route('/get', methods=['GET'])
-# def get_items():
-#     response = requests.get(f"{EXTERNAL_API_URL}/get")
-#     if response.status_code == 200:
-#         return jsonify(response.json()), 200
-#     return jsonify({"error": "Failed to fetch items"}), response.status_code
-
-# @app.route('/items/<int:item_id>', methods=['GET'])
-# def get_item(item_id):
-#     response = requests.get(f"{EXTERNAL_API_URL}/{item_id}")
-#     if response.status_code == 200:
-#         return jsonify(response.json()), 200
-#     return jsonify({"error": "Item not found"}), response.status_code
-
-# # Rota POST - Criar um novo item na API externa
-# @app.route('/items', methods=['POST'])
-# def create_item():
-#     data = request.get_json()
-#     response = requests.post(EXTERNAL_API_URL, json=data)
-#     if response.status_code == 201:
-#         return jsonify(response.json()), 201
-#     return jsonify({"error": "Failed to create item"}), response.status_code
-
-# # Rota PUT - Atualizar um item existente na API externa
-# @app.route('/items/<int:item_id>', methods=['PUT'])
-# def update_item(item_id):
-#     data = request.get_json()
-#     response = requests.put(f"{EXTERNAL_API_URL}/{item_id}", json=data)
-#     if response.status_code == 200:
-#         return jsonify(response.json()), 200
-#     return jsonify({"error": "Item not found or failed to update"}), response.status_code
-
-# # Rota DELETE - Deletar um item na API externa
-# @app.route('/items/<int:item_id>', methods=['DELETE'])
-# def delete_item(item_id):
-#     response = requests.delete(f"{EXTERNAL_API_URL}/{item_id}")
-#     if response.status_code == 200:
-#         return jsonify({"message": "Item deleted"}), 200
-#     return jsonify({"error": "Item not found or failed to delete"}), response.status_code
-
-# # Executa o servidor Flask
-# if __name__ == '__main__':
-#     app.run(debug=True)
