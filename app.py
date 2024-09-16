@@ -1,5 +1,5 @@
-from flask import Flask, request, jsonify
-from flask_restx import Api, Resource, fields, Namespace
+from flask import Flask, request
+from flask_restx import Api, Resource, fields
 import requests
 from datetime import datetime, date
 
@@ -15,7 +15,6 @@ api = Api(
     default='Workout',
     default_label='Cycling'
 )
-
 item_model = api.model('Workout', {
     'id': fields.Integer(readonly=True),
     'date': fields.Date(required=True, description='Format: AAAA:MM:YY.', default=date.today()),
@@ -30,6 +29,18 @@ item_model = api.model('Workout', {
     'speed': fields.Float(readonly=True)
 })
 
+
+@api.route('/forecast/<string:city_name>/<string:uf>')
+class Forecast(Resource):
+    @api.doc(description='Get weather forecast')
+    def post(self, city_name, uf):
+        """Gets weather forecast"""
+        KEY = 'b4a3ccab'
+        response = requests.get(f"https://api.hgbrasil.com/weather?key={KEY}&city_name={city_name},{uf}&date={date.today()}&mode=all&fields=only_results,city_name,forecast,max,min,date")
+        if response.status_code == 200:
+            return response.json(), 200
+        return {'error': 'Failed to fetch forecast'}, response.status_code
+    
 
 @api.route('/items')
 class ItemList(Resource):
