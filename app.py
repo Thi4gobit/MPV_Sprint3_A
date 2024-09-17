@@ -4,7 +4,9 @@ import requests
 from datetime import datetime, date
 
 
-EXTERNAL_API_URL = "http://127.0.0.1:8000/workouts"
+# EXTERNAL_API_URL = "http://localhost:8000/workouts"
+# EXTERNAL_API_URL = "http://network_docker:8000/workouts"
+EXTERNAL_API_URL = "http://django:8000/workouts"
 
 app = Flask(__name__)
 api = Api(
@@ -33,7 +35,7 @@ item_model = api.model('Workout', {
 @api.route('/forecast/<string:city_name>/<string:uf>')
 class Forecast(Resource):
     @api.doc(description='Get weather forecast')
-    def post(self, city_name, uf):
+    def get(self, city_name, uf):
         """Gets weather forecast"""
         KEY = 'b4a3ccab'
         response = requests.get(f"https://api.hgbrasil.com/weather?key={KEY}&city_name={city_name},{uf}&date={date.today()}&mode=all&fields=only_results,city_name,forecast,max,min,date")
