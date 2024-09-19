@@ -8,9 +8,7 @@ O objetivo aqui é apresetar uma API emplementada seguindo o estilo REST.
 
 As principais tecnologias que serão utilizadas aqui é o:
  - [Flask](https://flask.palletsprojects.com/en/2.3.x/)
- - [SQLAlchemy](https://www.sqlalchemy.org/)
- - [OpenAPI3](https://swagger.io/specification/)
- - [SQLite](https://www.sqlite.org/index.html)
+ - [Flask-RESTX](https://flask-restx.readthedocs.io/en/latest/)
 
 ---
 ### Instalação
@@ -28,10 +26,10 @@ Após clonar o repositório, é necessário ir ao diretório raiz, pelo terminal
 Este comando instala as dependências/bibliotecas, descritas no arquivo `requirements.txt`.
 
 ---
-### Executando o servidor
+### Executando a aplicação
 
 
-Para executar a API  basta executar:
+Para executar a API basta executar:
 
 ```
 (env)$ flask run --host 0.0.0.0 --port 5000
