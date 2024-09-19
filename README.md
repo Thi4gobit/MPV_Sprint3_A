@@ -4,6 +4,13 @@
 
 Este pequeno projeto faz parte do MVP do módulo da Disciplina **Desenvolvimento Back-end Avançado** 
 
+Estaa aplicação consome uma API externa e uma API, também, desenvolvida para este MVP. Para acessar a outra API acesse:
+
+ - [MPV_Sprint3_B](https://github.com/Thi4gobit/MVP_Sprint3_B)
+
+Para testes recomenda a execução do `MPV_Sprint3_B` antes da execução desta aplicação.
+
+
 O objetivo aqui é apresetar uma API emplementada seguindo o estilo REST.
 
 As principais tecnologias que serão utilizadas aqui é o:
