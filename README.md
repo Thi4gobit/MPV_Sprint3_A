@@ -1,6 +1,6 @@
 # MPV_Sprint3_A
 
-Este pequeno projeto faz parte do MVP do módulo da Disciplina **Desenvolvimento Back-end Avançado** 
+Este pequeno projeto faz parte do MVP do módulo da disciplina **Desenvolvimento Back-end Avançado** 
 
 As principais tecnologias que serão utilizadas aqui é o:
  - [Flask](https://flask.palletsprojects.com/en/2.3.x/)
@@ -9,10 +9,10 @@ As principais tecnologias que serão utilizadas aqui é o:
 ---
 ### Interoperabilidade
 
-Esta aplicação interage com outra API também escopo deste MVP. Para acessar a outra API acesse:
+Esta aplicação interage com outra API também escopo deste MVP. Para visualizar a outra API acesse:
  - [MPV_Sprint3_B](https://github.com/Thi4gobit/MVP_Sprint3_B)
 
-Para testes com interoperabilidade recomenda-se a execução do `MPV_Sprint3_B` antes da execução desta aplicação.
+Para testes com interoperabilidade recomenda-se a execução do **MPV_Sprint3_B** antes da execução desta aplicação.
 
 ---
 ### Instalação
@@ -51,18 +51,18 @@ Abra o [http://localhost:5000/#/](http://localhost:5000/#/) no navegador para ve
 ---
 ### Importante!
 
-Para garantir a interoperabilidade das aplicações, execute no docker conforme mostrado adiante ou ajuste a linha de código em `app.py` conforme a sua configuração da aplicação em **MPV_Sprint3_B**. Por exemplo:
+Para garantir a interoperabilidade das aplicações, execute no docker conforme mostrado adiante ou ajuste a linha de código em `app.py` conforme a configuração da aplicação em **MPV_Sprint3_B**. Por exemplo:
 
 ```py
 EXTERNAL_API_URL = "http://localhost:8000/workouts"
 ```
 
 ---
-## Como executar através do Docker
+### Como executar através do Docker
 
 Certifique-se de ter o [Docker](https://docs.docker.com/engine/install/) instalado e em execução em sua máquina.
 
-Cosiderando a interoperabilidade com o `MPV_Sprint3_B` crie uma rede para inerligar as duas aplicações antes de executrar o container flask, descrito acima.
+Cosiderando a interoperabilidade com o **MPV_Sprint3_B** crie uma rede para inerligar as duas aplicações.
 
 Para criar uma rede no docker execute **como administrador** o seguinte comando:
 
@@ -91,12 +91,12 @@ Uma vez criada a imagem, para executar o container basta executar, **como admini
 $ docker run -d --name flask --network mvp -p 5000:5000 flask
 ```
 
-Uma vez executando, para acessar a API, basta abrir o [http://localhost:5000/#/](http://localhost:5000/#/) no navegador.
+Uma vez executado, para acessar a API, basta abrir o [http://localhost:5000/#/](http://localhost:5000/#/) no navegador.
 
 
 ### Dicas
 
->Se o nome dado a imagem em **MPV_Sprint3_B** for diferente de **django**, ajuste a linha de código em `app.py`:
+>Se o nome dado a imagem no docker em **MPV_Sprint3_B** for diferente de **django**, ajuste a linha de código em `app.py`:
 >
 >```py
 >EXTERNAL_API_URL = "http://django:8000/workouts"
