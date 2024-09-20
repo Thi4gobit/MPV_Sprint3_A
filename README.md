@@ -17,7 +17,6 @@ Para testes com interoperabilidade recomenda-se a execução do `MPV_Sprint3_B` 
 ---
 ### Instalação
 
-Será necessário ter todas as libs python listadas no `requirements.txt` instaladas.
 Após clonar o repositório, é necessário ir ao diretório raiz, pelo terminal, para poder executar os comandos descritos abaixo.
 
 > É fortemente indicado o uso de ambientes virtuais do tipo [virtualenv](https://virtualenv.pypa.io/en/latest/installation.html).
@@ -30,7 +29,6 @@ Este comando instala as dependências/bibliotecas, descritas no arquivo `require
 
 ---
 ### Executando a aplicação
-
 
 Para executar a API basta executar:
 
@@ -51,30 +49,18 @@ automaticamente após uma mudança no código fonte.
 Abra o [http://localhost:5000/#/](http://localhost:5000/#/) no navegador para verificar o status da API em execução.
 
 ---
+### Importante!
+
+Para garantir a interoperabilidade das aplicações, execute no docker conforme mostrado adiante ou ajuste a linha de código em `app.py` conforme a sua configuração da aplicação em **MPV_Sprint3_B**. Por exemplo:
+
+```py
+EXTERNAL_API_URL = "http://localhost:8000/workouts"
+```
+
+---
 ## Como executar através do Docker
 
 Certifique-se de ter o [Docker](https://docs.docker.com/engine/install/) instalado e em execução em sua máquina.
-
-Navegue até o diretório que contém o Dockerfile e o requirements.txt no terminal.
-Execute **como administrador** o seguinte comando para construir a imagem Docker:
-
-```
-$ docker build -t flask .
-```
-
-Uma vez criada a imagem, para executar o container basta executar, **como administrador**, seguinte o comando:
-
-```
-$ docker run -p 5000:5000 flask
-```
-
-Uma vez executando, para acessar a API, basta abrir o [http://localhost:5000/#/](http://localhost:5000/#/) no navegador.
-
-
-### Como executar através do Docker considerando a interoperabilidade com a outra API do MVP
-
-
-
 
 Cosiderando a interoperabilidade com o `MPV_Sprint3_B` crie uma rede para inerligar as duas aplicações antes de executrar o container flask, descrito acima.
 
@@ -110,7 +96,7 @@ Uma vez executando, para acessar a API, basta abrir o [http://localhost:5000/#/]
 
 ### Dicas
 
->Se o nome dado a imagem em **MPV_Sprint3_B** for diferente de **django**, ajuste a linha de código:
+>Se o nome dado a imagem em **MPV_Sprint3_B** for diferente de **django**, ajuste a linha de código em `app.py`:
 >
 >```py
 >EXTERNAL_API_URL = "http://django:8000/workouts"
