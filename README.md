@@ -1,25 +1,21 @@
 # MPV_Sprint3_A
 
-# Minha API em REST
-
 Este pequeno projeto faz parte do MVP do módulo da Disciplina **Desenvolvimento Back-end Avançado** 
-
-Estaa aplicação consome uma API externa e uma API, também, desenvolvida para este MVP. Para acessar a outra API acesse:
-
- - [MPV_Sprint3_B](https://github.com/Thi4gobit/MVP_Sprint3_B)
-
-Para testes recomenda a execução do `MPV_Sprint3_B` antes da execução desta aplicação.
-
-
-O objetivo aqui é apresetar uma API emplementada seguindo o estilo REST.
 
 As principais tecnologias que serão utilizadas aqui é o:
  - [Flask](https://flask.palletsprojects.com/en/2.3.x/)
  - [Flask-RESTX](https://flask-restx.readthedocs.io/en/latest/)
 
 ---
-### Instalação
+### Interoperabilidade
 
+Esta aplicação interage com outra API também escopo deste MVP. Para acessar a outra API acesse:
+ - [MPV_Sprint3_B](https://github.com/Thi4gobit/MVP_Sprint3_B)
+
+Para testes com interoperabilidade recomenda-se a execução do `MPV_Sprint3_B` antes da execução desta aplicação.
+
+---
+### Instalação
 
 Será necessário ter todas as libs python listadas no `requirements.txt` instaladas.
 Após clonar o repositório, é necessário ir ao diretório raiz, pelo terminal, para poder executar os comandos descritos abaixo.
@@ -63,48 +59,61 @@ Navegue até o diretório que contém o Dockerfile e o requirements.txt no termi
 Execute **como administrador** o seguinte comando para construir a imagem Docker:
 
 ```
-$ docker build -t rest-api .
+$ docker build -t flask .
 ```
 
 Uma vez criada a imagem, para executar o container basta executar, **como administrador**, seguinte o comando:
 
 ```
-$ docker run -p 5000:5000 rest-api
+$ docker run -p 5000:5000 flask
 ```
 
 Uma vez executando, para acessar a API, basta abrir o [http://localhost:5000/#/](http://localhost:5000/#/) no navegador.
 
 
+### Como executar através do Docker considerando a interoperabilidade com a outra API do MVP
 
-### Alguns comandos úteis do Docker
 
->**Para verificar se a imagem foi criada** você pode executar o seguinte comando:
+
+
+Cosiderando a interoperabilidade com o `MPV_Sprint3_B` crie uma rede para inerligar as duas aplicações antes de executrar o container flask, descrito acima.
+
+Para criar uma rede no docker execute **como administrador** o seguinte comando:
+
+```
+$ docker network create mvp
+```
+
+Para verificar se a rede foi criada execute:
+
+```
+$ docker network ls
+```
+
+Confira se a rede foi criada.
+
+Navegue até o diretório que contém o Dockerfile e o requirements.txt no terminal.
+Execute **como administrador** o seguinte comando para construir a imagem Docker:
+
+```
+$ docker build -t flask .
+```
+
+Uma vez criada a imagem, para executar o container basta executar, **como administrador**, seguinte o comando:
+
+```
+$ docker run -d --name flask --network mvp -p 5000:5000 flask
+```
+
+Uma vez executando, para acessar a API, basta abrir o [http://localhost:5000/#/](http://localhost:5000/#/) no navegador.
+
+
+### Dicas
+
+>Se o nome dado a imagem em **MPV_Sprint3_B** for diferente de **django**, ajuste a linha de código:
 >
->```
->$ docker images
->```
->
-> Caso queira **remover uma imagem**, basta executar o comando:
->```
->$ docker rmi <IMAGE ID>
->```
->Subistituindo o `IMAGE ID` pelo código da imagem
->
->**Para verificar se o container está em exceução** você pode executar o seguinte comando:
->
->```
->$ docker container ls --all
+>```py
+>EXTERNAL_API_URL = "http://django:8000/workouts"
 >```
 >
-> Caso queira **parar um conatiner**, basta executar o comando:
->```
->$ docker stop <CONTAINER ID>
->```
->Subistituindo o `CONTAINER ID` pelo ID do conatiner
->
->
-> Caso queira **destruir um conatiner**, basta executar o comando:
->```
->$ docker rm <CONTAINER ID>
->```
 >Para mais comandos, veja a [documentação do docker](https://docs.docker.com/engine/reference/run/).
