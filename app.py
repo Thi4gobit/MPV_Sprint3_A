@@ -5,7 +5,6 @@ from datetime import datetime, date
 
 
 # EXTERNAL_API_URL = "http://localhost:8000/workouts"
-# EXTERNAL_API_URL = "http://network_docker:8000/workouts"
 EXTERNAL_API_URL = "http://django:8000/workouts"
 
 app = Flask(__name__)
