@@ -1,22 +1,22 @@
 # MPV_Sprint3_A
 
-# Minha API em REST
-
-Este pequeno projeto faz parte do MVP do módulo da Disciplina **Desenvolvimento Back-end Avançado** 
-
-O objetivo aqui é apresetar uma API emplementada seguindo o estilo REST.
+Este pequeno projeto faz parte do MVP do módulo da disciplina **Desenvolvimento Back-end Avançado** 
 
 As principais tecnologias que serão utilizadas aqui é o:
  - [Flask](https://flask.palletsprojects.com/en/2.3.x/)
- - [SQLAlchemy](https://www.sqlalchemy.org/)
- - [OpenAPI3](https://swagger.io/specification/)
- - [SQLite](https://www.sqlite.org/index.html)
+ - [Flask-RESTX](https://flask-restx.readthedocs.io/en/latest/)
+
+---
+### Interoperabilidade
+
+Esta aplicação interage com outra API também escopo deste MVP. Para visualizar a outra API acesse:
+ - [MPV_Sprint3_B](https://github.com/Thi4gobit/MVP_Sprint3_B)
+
+Para testes com interoperabilidade recomenda-se a execução do **MPV_Sprint3_B** antes da execução desta aplicação.
 
 ---
 ### Instalação
 
-
-Será necessário ter todas as libs python listadas no `requirements.txt` instaladas.
 Após clonar o repositório, é necessário ir ao diretório raiz, pelo terminal, para poder executar os comandos descritos abaixo.
 
 > É fortemente indicado o uso de ambientes virtuais do tipo [virtualenv](https://virtualenv.pypa.io/en/latest/installation.html).
@@ -28,10 +28,9 @@ Após clonar o repositório, é necessário ir ao diretório raiz, pelo terminal
 Este comando instala as dependências/bibliotecas, descritas no arquivo `requirements.txt`.
 
 ---
-### Executando o servidor
+### Executando a aplicação
 
-
-Para executar a API  basta executar:
+Para executar a API basta executar:
 
 ```
 (env)$ flask run --host 0.0.0.0 --port 5000
@@ -50,56 +49,57 @@ automaticamente após uma mudança no código fonte.
 Abra o [http://localhost:5000/#/](http://localhost:5000/#/) no navegador para verificar o status da API em execução.
 
 ---
-## Como executar através do Docker
+### Importante!
+
+Para garantir a interoperabilidade das aplicações, execute no docker conforme mostrado adiante ou ajuste a linha de código em `app.py` conforme a configuração da aplicação em **MPV_Sprint3_B**. Por exemplo:
+
+```py
+EXTERNAL_API_URL = "http://localhost:8000/workouts"
+```
+
+---
+### Como executar através do Docker
 
 Certifique-se de ter o [Docker](https://docs.docker.com/engine/install/) instalado e em execução em sua máquina.
+
+Cosiderando a interoperabilidade com o **MPV_Sprint3_B** crie uma rede para inerligar as duas aplicações.
+
+Para criar uma rede no docker execute **como administrador** o seguinte comando:
+
+```
+$ docker network create mvp
+```
+
+Para verificar se a rede foi criada execute:
+
+```
+$ docker network ls
+```
+
+Confira se a rede foi criada.
 
 Navegue até o diretório que contém o Dockerfile e o requirements.txt no terminal.
 Execute **como administrador** o seguinte comando para construir a imagem Docker:
 
 ```
-$ docker build -t rest-api .
+$ docker build -t flask .
 ```
 
 Uma vez criada a imagem, para executar o container basta executar, **como administrador**, seguinte o comando:
 
 ```
-$ docker run -p 5000:5000 rest-api
+$ docker run -d --name flask --network mvp -p 5000:5000 flask
 ```
 
-Uma vez executando, para acessar a API, basta abrir o [http://localhost:5000/#/](http://localhost:5000/#/) no navegador.
+Uma vez executado, para acessar a API, basta abrir o [http://localhost:5000/#/](http://localhost:5000/#/) no navegador.
 
 
+### Dicas
 
-### Alguns comandos úteis do Docker
-
->**Para verificar se a imagem foi criada** você pode executar o seguinte comando:
+>Se o nome dado a imagem no docker em **MPV_Sprint3_B** for diferente de **django**, ajuste a linha de código em `app.py`:
 >
->```
->$ docker images
+>```py
+>EXTERNAL_API_URL = "http://django:8000/workouts"
 >```
 >
-> Caso queira **remover uma imagem**, basta executar o comando:
->```
->$ docker rmi <IMAGE ID>
->```
->Subistituindo o `IMAGE ID` pelo código da imagem
->
->**Para verificar se o container está em exceução** você pode executar o seguinte comando:
->
->```
->$ docker container ls --all
->```
->
-> Caso queira **parar um conatiner**, basta executar o comando:
->```
->$ docker stop <CONTAINER ID>
->```
->Subistituindo o `CONTAINER ID` pelo ID do conatiner
->
->
-> Caso queira **destruir um conatiner**, basta executar o comando:
->```
->$ docker rm <CONTAINER ID>
->```
 >Para mais comandos, veja a [documentação do docker](https://docs.docker.com/engine/reference/run/).
