@@ -2,6 +2,8 @@
 
 Este pequeno projeto faz parte do MVP do módulo da disciplina **Desenvolvimento Back-end Avançado** 
 
+A aplicação é utilizada para registro e consultas de treinos de ciclismo.
+
 As principais tecnologias que serão utilizadas aqui é o:
  - [Flask](https://flask.palletsprojects.com/en/2.3.x/)
  - [Flask-RESTX](https://flask-restx.readthedocs.io/en/latest/)
