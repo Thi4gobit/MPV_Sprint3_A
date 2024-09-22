@@ -71,10 +71,10 @@ class ItemNew(Resource):
 class ItemUpdate(Resource):
     @api.doc(description='Update an existing item')
     @api.expect(item_model)
-    def put(self, pk):
+    def patch(self, pk):
         """Updates an existing item"""
         data = request.get_json()
-        response = requests.put(f"{EXTERNAL_API_URL}/update/{pk}", json=data)
+        response = requests.patch(f"{EXTERNAL_API_URL}/update/{pk}", json=data)
         if response.status_code == 200:
             return response.json(), 200
         return response.json(), response.status_code
